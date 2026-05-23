@@ -9,7 +9,7 @@ class WgLocation extends StatelessWidget {
   Widget build(BuildContext context) {
     return SizedBox(
       width: double.infinity,
-      height: 70,
+      height: 65,
 
       child: Padding(
         padding: EdgeInsetsGeometry.symmetric(horizontal: 8),
