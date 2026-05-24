@@ -9,8 +9,7 @@ class WgLocation extends StatelessWidget {
   Widget build(BuildContext context) {
     return SizedBox(
       width: double.infinity,
-      height: 65,
-
+      height: 70,
       child: Padding(
         padding: EdgeInsetsGeometry.symmetric(horizontal: 8),
         child: Card(

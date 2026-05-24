@@ -45,72 +45,76 @@ class _HomePageState extends State<HomePage> {
 
     return Scaffold(
       body: SafeArea(
-        child: Column(
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                Text(
-                  'Welcome ${user?.name}',
-                  style: TextStyle(color: Colors.black),
-                ),
-                GestureDetector(
-                  onTap: () {
-                    //Navigator.pushNamed(context, AppNavigator.profile);
-                  },
-                  child: GloboAvatar(name: user?.name ?? ''),
-                ),
-              ],
-            ),
-            Text(
-              'Votacioness',
-              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-            ),
-            Gap(20),
-            Expanded(
-              child: BlocBuilder<CandidaturasBloc, CandidaturasState>(
-                builder: (context, state) {
-                  if (state is CandidaturasInitial) {
-                    return Text(
-                      'Loading candidaturas...',
-                      style: TextStyle(color: Colors.black),
-                    );
-                  }
-                  if (state is CandidaturasFailed) {
-                    return Text(
-                      'Error: Failed to load candidaturas',
-                      style: TextStyle(color: Colors.black),
-                    );
-                  }
-                  if (state is CandidaturasLoaded) {
-                    return ListView.builder(
-                      itemBuilder: (BuildContext context, int index) {
-                        return GestureDetector(
-                          onTap: () {
-                            navigatorKey.currentState?.pushNamedAndRemoveUntil(
-                              AppNavigator.votaciones,
-                              (route) => false,
-                              arguments: state.candidaturas[index],
-                            );
-                          },
-                          child: ItemHome(
-                            candidatura: state.candidaturas[index],
-                          ),
-                        );
-                      },
-                      itemCount: state.candidaturas.length,
-                    );
-                  }
-                  return Text(
-                    'Unknown state',
+        child: Container(
+          color: Colors.red[50],
+          child: Column(
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  Text(
+                    'Welcome ${user?.name}',
                     style: TextStyle(color: Colors.black),
-                  );
-                },
+                  ),
+                  GestureDetector(
+                    onTap: () {
+                      //Navigator.pushNamed(context, AppNavigator.profile);
+                    },
+                    child: GloboAvatar(name: user?.name ?? ''),
+                  ),
+                ],
               ),
-            ),
-            Gap(20),
-            WgLocation(),
-          ],
+              Text(
+                'Votacioness',
+                style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+              ),
+              Gap(20),
+              Expanded(
+                child: BlocBuilder<CandidaturasBloc, CandidaturasState>(
+                  builder: (context, state) {
+                    if (state is CandidaturasInitial) {
+                      return Text(
+                        'Loading candidaturas...',
+                        style: TextStyle(color: Colors.black),
+                      );
+                    }
+                    if (state is CandidaturasFailed) {
+                      return Text(
+                        'Error: Failed to load candidaturas',
+                        style: TextStyle(color: Colors.black),
+                      );
+                    }
+                    if (state is CandidaturasLoaded) {
+                      return ListView.builder(
+                        itemBuilder: (BuildContext context, int index) {
+                          return GestureDetector(
+                            onTap: () {
+                              navigatorKey.currentState
+                                  ?.pushNamedAndRemoveUntil(
+                                    AppNavigator.votaciones,
+                                    (route) => false,
+                                    arguments: state.candidaturas[index],
+                                  );
+                            },
+                            child: ItemHome(
+                              candidatura: state.candidaturas[index],
+                            ),
+                          );
+                        },
+                        itemCount: state.candidaturas.length,
+                      );
+                    }
+                    return Text(
+                      'Unknown state',
+                      style: TextStyle(color: Colors.black),
+                    );
+                  },
+                ),
+              ),
+              Gap(20),
+              WgLocation(),
+            ],
+          ),
         ),
       ),
       bottomNavigationBar: SafeArea(
