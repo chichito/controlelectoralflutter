@@ -112,7 +112,27 @@ class _HomePageState extends State<HomePage> {
                   Gap(20),
                 ],
               ),
-              Positioned(child: WgLocation()),
+              Align(
+                alignment: Alignment.bottomCenter,
+                child: GestureDetector(
+                  onTap: () {
+                    showDialog(
+                      context: context,
+                      builder: (context) => AlertDialog(
+                        title: Text('Ubicación'),
+                        content: WgLocation(),
+                        actions: [
+                          TextButton(
+                            onPressed: () => Navigator.pop(context),
+                            child: Text('Cerrar'),
+                          ),
+                        ],
+                      ),
+                    );
+                  },
+                  child: WgLocation(),
+                ),
+              ),
             ],
           ),
         ),
