@@ -9,14 +9,13 @@ class WgLocation extends StatelessWidget {
   Widget build(BuildContext context) {
     return SizedBox(
       width: double.infinity,
-      height: 70,
+      height: 50,
       child: Padding(
         padding: EdgeInsetsGeometry.symmetric(horizontal: 8),
         child: Card(
           elevation: 10,
           child: Column(
             children: [
-              Text('Ubicación actual:'),
               BlocConsumer<LocationBloc, LocationState>(
                 listener: (BuildContext context, LocationState state) {},
                 builder: (context, state) {
@@ -26,16 +25,14 @@ class WgLocation extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         //spacing: 12,
                         children: [
-                          Text('Latitud: ${state.lastKnownLocation?.latitude}'),
+                          Text('Lat: ${state.lastKnownLocation?.latitude}'),
                           VerticalDivider(color: Colors.grey[300]),
-                          Text(
-                            'Longitud: ${state.lastKnownLocation?.longitude}',
-                          ),
+                          Text('Lon: ${state.lastKnownLocation?.longitude}'),
                           //VerticalDivider(color: Colors.grey[300]),
                           //Text('Distancia: ${state.distance}'),
                         ],
                       ),
-                      Text('Distancia: ${state.distance}'),
+                      Text('Dis: ${state.distance}'),
                     ],
                   );
                 },

@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 import 'dart:typed_data';
+
 import 'package:controlelectoral/data/repositories/candidatos/candidato_repository_impl.dart';
 import 'package:controlelectoral/data/repositories/candidaturas/candidatura_repository_impl.dart';
 import 'package:controlelectoral/data/repositories/lista/lista_repository_impl.dart';
@@ -10,10 +11,10 @@ import 'package:controlelectoral/domain/models/candidatura.dart';
 import 'package:controlelectoral/domain/models/lista.dart';
 import 'package:controlelectoral/domain/models/user.dart';
 import 'package:dio/dio.dart';
-import 'package:path_provider/path_provider.dart';
-import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 // ignore: depend_on_referenced_packages
 import 'package:path/path.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 
 class SQLiteHelper {
   Database? _database;
@@ -71,7 +72,7 @@ class SQLiteHelper {
 
   Future<void> _onCreate(Database database, int version) async {
     final db = database;
-
+    final String sIp = '192.168.2.5';
     await db.execute(""" CREATE TABLE IF NOT EXISTS ubicaciones(
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             cedula TEXT,
