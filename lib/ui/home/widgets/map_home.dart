@@ -1,16 +1,10 @@
+import 'package:controlelectoral/ui/home/widgets/track_home.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
 
-class MapHome extends StatefulWidget {
+class MapHome extends StatelessWidget {
   const MapHome({super.key});
-
-  @override
-  State<MapHome> createState() => _MapHomeState();
-}
-
-class _MapHomeState extends State<MapHome> {
-  final MapController _mapController = MapController();
 
   @override
   Widget build(BuildContext context) {
@@ -39,7 +33,6 @@ class _MapHomeState extends State<MapHome> {
               ],
             ),
             child: FlutterMap(
-              mapController: _mapController,
               options: MapOptions(
                 initialCenter: LatLng(-2.170998, -79.922359),
                 initialZoom: 15,
@@ -50,14 +43,34 @@ class _MapHomeState extends State<MapHome> {
                   subdomains: const ['a', 'b', 'c'],
                   userAgentPackageName: 'com.example.controlelectoral',
                 ),
+                PolylineLayer(
+                  polylines: [
+                    //Polyline(points: State.)
+                  ],
+                ),
               ],
             ),
           ),
           Align(
             alignment: Alignment.bottomCenter,
-            child: ElevatedButton(
-              onPressed: () => Navigator.pop(context, 'OK'),
-              child: Text('salir'),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                ElevatedButton(
+                  onPressed: () {
+                    showDialog(
+                      context: context,
+                      barrierDismissible: false,
+                      builder: (context) => TrackHome(),
+                    );
+                  },
+                  child: Text('Reportee'),
+                ),
+                ElevatedButton(
+                  onPressed: () => Navigator.pop(context, 'OK'),
+                  child: Text('salir'),
+                ),
+              ],
             ),
           ),
         ],
