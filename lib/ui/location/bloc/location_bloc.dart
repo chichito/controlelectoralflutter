@@ -4,7 +4,7 @@ import 'package:controlelectoral/data/repositories/ubicaciones/ubicaciones_repos
 import 'package:controlelectoral/domain/models/ubicacion.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:geolocator/geolocator.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:latlong2/latlong.dart';
 
 part 'location_event.dart';
 part 'location_state.dart';
