@@ -5,6 +5,7 @@ import 'package:controlelectoral/ui/core/ui/widgets/globo_avatar.dart';
 import 'package:controlelectoral/ui/core/ui/widgets/wg_location.dart';
 import 'package:controlelectoral/ui/home/bloc/candidaturas_bloc.dart';
 import 'package:controlelectoral/ui/home/widgets/item_home.dart';
+import 'package:controlelectoral/ui/home/widgets/map_home.dart';
 import 'package:controlelectoral/ui/location/bloc/location_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -118,16 +119,8 @@ class _HomePageState extends State<HomePage> {
                   onTap: () {
                     showDialog(
                       context: context,
-                      builder: (context) => AlertDialog(
-                        title: Text('Ubicación'),
-                        content: WgLocation(),
-                        actions: [
-                          TextButton(
-                            onPressed: () => Navigator.pop(context),
-                            child: Text('Cerrar'),
-                          ),
-                        ],
-                      ),
+                      barrierDismissible: false,
+                      builder: (context) => MapHome(),
                     );
                   },
                   child: WgLocation(),
