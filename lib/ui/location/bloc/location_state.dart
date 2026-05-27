@@ -6,6 +6,7 @@ class LocationState {
   final bool showLocationHistory;
   final double speed;
   final double distance;
+  final List<Ubicacion> lstUbicaciones;
 
   LocationState({
     this.lastKnownLocation,
@@ -13,6 +14,7 @@ class LocationState {
     this.showLocationHistory = false,
     this.speed = 0.0,
     this.distance = 0.0,
+    this.lstUbicaciones = const [],
   });
 
   LocationState copyWith({
@@ -21,6 +23,7 @@ class LocationState {
     bool? showLocationHistory,
     double? speed,
     double? distance,
+    List<Ubicacion>? lstUbicaciones,
   }) {
     return LocationState(
       lastKnownLocation: lastKnownLocation ?? this.lastKnownLocation,
@@ -28,6 +31,9 @@ class LocationState {
       showLocationHistory: showLocationHistory ?? this.showLocationHistory,
       speed: speed ?? this.speed,
       distance: distance ?? this.distance,
+      lstUbicaciones: lstUbicaciones ?? this.lstUbicaciones,
     );
   }
 }
+
+class LocationLoaded extends LocationState {}

@@ -16,9 +16,12 @@ class UbicacionRepositoryImpl extends UbicacionRepository {
   }
 
   @override
-  Future<List<Ubicacion>> getAllUbicaciones() async {
+  Future<List<Ubicacion>> getAllUbicaciones(String sCedula) async {
     final db = await (SQLiteHelper()).database;
-    final List<Map<String, dynamic>> maps = await db.query('ubicaciones');
+    final List<Map<String, dynamic>> maps = await db.rawQuery(
+      'SELECT * FROM ubicaciones WHERE cedula = ?',
+      [sCedula],
+    );
 
     return List.generate(maps.length, (index) {
       return Ubicacion(
@@ -27,9 +30,7 @@ class UbicacionRepositoryImpl extends UbicacionRepository {
         latitud: maps[index]['latitud'],
         longitud: maps[index]['longitud'],
         distancia: maps[index]['distancia'],
-        fechahoraregistro: DateTime.parse(
-          maps[index]['fechahoraregistro'],
-        ).toIso8601String(),
+        fechahoraregistro: DateTime.parse(maps[index]['fechahoraregistro']),
         synced: maps[index]['synced'],
       );
     });
@@ -39,7 +40,7 @@ class UbicacionRepositoryImpl extends UbicacionRepository {
   Future<Ubicacion?> getUbicacionByValidate(String fechaRegistro) async {
     final db = await (SQLiteHelper()).database;
     final List<Map<String, dynamic>> maps = await db.rawQuery(
-      'SELECT * FROM ubicaciones WHERE fechahoraregistro = ?',
+      'SELECT id,cedula,latitud,longitud FROM ubicaciones WHERE fechahoraregistro = ?',
       [fechaRegistro],
     );
     if (maps.isNotEmpty) {
@@ -49,9 +50,7 @@ class UbicacionRepositoryImpl extends UbicacionRepository {
         latitud: maps[0]['latitud'],
         longitud: maps[0]['longitud'],
         distancia: maps[0]['distancia'],
-        fechahoraregistro: DateTime.parse(
-          maps[0]['fechahoraregistro'],
-        ).toIso8601String(),
+        fechahoraregistro: maps[0]['fechahoraregistro'],
         synced: maps[0]['synced'],
       );
     }

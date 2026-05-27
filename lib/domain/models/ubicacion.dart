@@ -10,7 +10,7 @@ class Ubicacion {
   final double? latitud;
   final double? longitud;
   final double? distancia;
-  final String? fechahoraregistro;
+  final DateTime? fechahoraregistro;
   final int? synced;
 
   Ubicacion({
@@ -39,7 +39,7 @@ class Ubicacion {
     "latitud": latitud,
     "longitud": longitud,
     "distancia": distancia,
-    "fechahoraregistro": fechahoraregistro,
+    "fechahoraregistro": fechahoraregistro?.toIso8601String(),
     "synced": synced,
   };
 
@@ -56,7 +56,7 @@ class Ubicacion {
       "latitud": latitud,
       "longitud": longitud,
       "distancia": distancia,
-      "fechahoraregistro": fechahoraregistro,
+      "fechahoraregistro": fechahoraregistro?.toIso8601String(),
     };
   }
 }

@@ -5,6 +5,6 @@ abstract class UbicacionRepository {
   Future<Ubicacion> sendUbicacion(Ubicacion ubicacion);
 
   // Obtener la lista de mensajes del chat
-  Future<List<Ubicacion>> getAllUbicaciones();
+  Future<List<Ubicacion>> getAllUbicaciones(String sCedula);
   Future<Ubicacion?> getUbicacionByValidate(String fechaRegistro);
 }

@@ -26,7 +26,16 @@ class _HomePageState extends State<HomePage> {
     // context.read<LocationBloc>().add(StartTrackingUserEvent());
 
     context.read<LocationBloc>()
-      ..add(InitialLocationEvent())
+      ..add(
+        InitialLocationEvent(
+          cedula: context.read<AuthBloc>().state is AuthStateLoggedIn
+              ? (context.read<AuthBloc>().state as AuthStateLoggedIn)
+                        .user
+                        .cedula ??
+                    ''
+              : '',
+        ),
+      )
       ..add(
         StartTrackingUserEvent(
           cedula: context.read<AuthBloc>().state is AuthStateLoggedIn
@@ -120,7 +129,7 @@ class _HomePageState extends State<HomePage> {
                     showDialog(
                       context: context,
                       barrierDismissible: false,
-                      builder: (context) => MapHome(),
+                      builder: (context) => MapHome(user: user),
                     );
                   },
                   child: WgLocation(),

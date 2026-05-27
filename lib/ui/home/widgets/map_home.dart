@@ -1,10 +1,15 @@
+import 'package:controlelectoral/domain/models/user.dart';
+import 'package:controlelectoral/ui/auth/bloc/auth_bloc.dart';
 import 'package:controlelectoral/ui/home/widgets/track_home.dart';
+import 'package:controlelectoral/ui/location/bloc/location_bloc.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
 
 class MapHome extends StatelessWidget {
-  const MapHome({super.key});
+  final User? user;
+  const MapHome({super.key, required this.user});
 
   @override
   Widget build(BuildContext context) {
@@ -44,11 +49,22 @@ class MapHome extends StatelessWidget {
                   userAgentPackageName: 'com.example.controlelectoral',
                 ),
                 //PolylineLayer(
-                  //polylines: [
-                    //Polyline(points: State.)
-                  //],
+                //polylines: [
+                //Polyline(points: State.)
+                //],
                 //),
               ],
+            ),
+          ),
+          Padding(
+            padding: EdgeInsets.all(16.0),
+            child: Text(
+              'El usuario: ${user!.name}',
+              style: TextStyle(
+                fontSize: 20,
+                color: Colors.black87,
+                fontWeight: FontWeight.bold,
+              ),
             ),
           ),
           Align(
@@ -61,7 +77,36 @@ class MapHome extends StatelessWidget {
                     showDialog(
                       context: context,
                       barrierDismissible: false,
-                      builder: (context) => TrackHome(),
+                      builder: (context) => BlocProvider(
+                        create: (context) => LocationBloc()
+                          ..add(
+                            InitialLocationEvent(
+                              cedula:
+                                  context.read<AuthBloc>().state
+                                      is AuthStateLoggedIn
+                                  ? (context.read<AuthBloc>().state
+                                                as AuthStateLoggedIn)
+                                            .user
+                                            .cedula ??
+                                        ''
+                                  : '',
+                            ),
+                          )
+                          ..add(
+                            StartTrackingUserEvent(
+                              cedula:
+                                  context.read<AuthBloc>().state
+                                      is AuthStateLoggedIn
+                                  ? (context.read<AuthBloc>().state
+                                                as AuthStateLoggedIn)
+                                            .user
+                                            .cedula ??
+                                        ''
+                                  : '',
+                            ),
+                          ),
+                        child: TrackHome(user: user),
+                      ),
                     );
                   },
                   child: Text('Reportee'),

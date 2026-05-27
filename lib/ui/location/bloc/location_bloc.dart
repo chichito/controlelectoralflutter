@@ -26,7 +26,16 @@ class LocationBloc extends Bloc<LocationEvent, LocationState> {
     final position = await Geolocator.getCurrentPosition();
     final latLang = LatLng(position.latitude, position.longitude);
     final speed = position.speed;
-    emit(state.copyWith(lastKnownLocation: latLang, speed: speed));
+    List<Ubicacion> ubiHistory = await ubicacionRepository.getAllUbicaciones(
+      event.cedula,
+    );
+    emit(
+      state.copyWith(
+        lastKnownLocation: latLang,
+        speed: speed,
+        lstUbicaciones: ubiHistory,
+      ),
+    );
   }
 
   Future<void> _onStartTrackingUserEvent(
@@ -78,13 +87,14 @@ class LocationBloc extends Bloc<LocationEvent, LocationState> {
             latitud: position.latitude,
             longitud: position.longitude,
             distancia: state.distance + currentDistance,
-            fechahoraregistro: DateTime.now().toIso8601String(),
+            fechahoraregistro: DateTime.now(),
           );
           // fire-and-forget save to repository to keep onData synchronous
           ubicacionRepository
               .sendUbicacion(ubicacion)
               .then((ubicacionr) {
-                // ignore: avoid_print
+                state.lstUbicaciones.add(ubicacionr);
+                emit(state.copyWith(lstUbicaciones: state.lstUbicaciones));
                 print('Grabar en la base de datos: ${ubicacionr.toJson()}');
               })
               .catchError((e) {
@@ -110,12 +120,14 @@ class LocationBloc extends Bloc<LocationEvent, LocationState> {
     emit(state.copyWith(showLocationHistory: !state.showLocationHistory));
   }
 
-  Future<LocationState> _onGetTrackingUserEvent(
+  Future<void> _onGetTrackingUserEvent(
     GetTrackingUserEvent event,
     Emitter<LocationState> emit,
   ) async {
-    Future<List<Ubicacion>> ubiHistory = ubicacionRepository
-        .getAllUbicaciones();
-    return state.copyWith(locationHistory: ubiHistory);
+    List<Ubicacion> ubiHistory = await ubicacionRepository.getAllUbicaciones(
+      event.sCedula,
+    );
+    state.copyWith(lstUbicaciones: ubiHistory);
+    emit(LocationLoaded());
   }
 }
