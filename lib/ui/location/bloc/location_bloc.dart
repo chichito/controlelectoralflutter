@@ -16,6 +16,7 @@ class LocationBloc extends Bloc<LocationEvent, LocationState> {
     on<InitialLocationEvent>(_onInitialLocationEvent);
     on<StartTrackingUserEvent>(_onStartTrackingUserEvent);
     on<ToggleShowLocationEvent>(_onToggleShowLocationEvent);
+    on<GetTrackingUserEvent>(_onGetTrackingUserEvent);
   }
 
   Future<void> _onInitialLocationEvent(
@@ -107,5 +108,14 @@ class LocationBloc extends Bloc<LocationEvent, LocationState> {
     Emitter<LocationState> emit,
   ) {
     emit(state.copyWith(showLocationHistory: !state.showLocationHistory));
+  }
+
+  Future<LocationState> _onGetTrackingUserEvent(
+    GetTrackingUserEvent event,
+    Emitter<LocationState> emit,
+  ) async {
+    Future<List<Ubicacion>> ubiHistory = ubicacionRepository
+        .getAllUbicaciones();
+    return state.copyWith(locationHistory: ubiHistory);
   }
 }

@@ -13,3 +13,5 @@ class StartTrackingUserEvent extends LocationEvent {
 
 // Evento para mostrar/ocultar la ruta del historial de ubicaciones
 class ToggleShowLocationEvent extends LocationEvent {}
+
+class GetTrackingUserEvent extends LocationEvent {}

@@ -43,11 +43,11 @@ class MapHome extends StatelessWidget {
                   subdomains: const ['a', 'b', 'c'],
                   userAgentPackageName: 'com.example.controlelectoral',
                 ),
-                PolylineLayer(
-                  polylines: [
+                //PolylineLayer(
+                  //polylines: [
                     //Polyline(points: State.)
-                  ],
-                ),
+                  //],
+                //),
               ],
             ),
           ),
