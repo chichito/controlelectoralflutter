@@ -22,30 +22,31 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
-    // context.read<LocationBloc>().add(InitialLocationEvent());
-    // context.read<LocationBloc>().add(StartTrackingUserEvent());
+
+    final authState = context.read<AuthBloc>().state;
+    final cedula = authState is AuthStateLoggedIn
+        ? authState.user.cedula ?? ''
+        : '';
+
+    // 1. Instanciar el BLoC y lanzar el primer evento
+    var locationBloc = context.read<LocationBloc>();
+    locationBloc.add(InitialLocationEvent(cedula: cedula));
+    // 2. Esperar el estado de éxito para lanzar el segundo evento
+    locationBloc.stream.firstWhere((state) => state.showLocationHistory).then((
+      _,
+    ) {
+      if (mounted) {
+        locationBloc.add(StartTrackingUserEvent(cedula: cedula));
+      }
+    });
+    /*
+    context.read<LocationBloc>().add(InitialLocationEvent());
+    context.read<LocationBloc>().add(StartTrackingUserEvent());
 
     context.read<LocationBloc>()
-      ..add(
-        InitialLocationEvent(
-          cedula: context.read<AuthBloc>().state is AuthStateLoggedIn
-              ? (context.read<AuthBloc>().state as AuthStateLoggedIn)
-                        .user
-                        .cedula ??
-                    ''
-              : '',
-        ),
-      )
-      ..add(
-        StartTrackingUserEvent(
-          cedula: context.read<AuthBloc>().state is AuthStateLoggedIn
-              ? (context.read<AuthBloc>().state as AuthStateLoggedIn)
-                        .user
-                        .cedula ??
-                    ''
-              : '',
-        ),
-      );
+      ..add(InitialLocationEvent(cedula: cedula))
+      ..add(StartTrackingUserEvent(cedula: cedula));
+      */
   }
 
   @override
@@ -129,36 +130,28 @@ class _HomePageState extends State<HomePage> {
                     showDialog(
                       context: context,
                       barrierDismissible: false,
-                      builder: (context) => BlocProvider(
-                        create: (context) => LocationBloc()
-                          ..add(
-                            InitialLocationEvent(
-                              cedula:
-                                  context.read<AuthBloc>().state
-                                      is AuthStateLoggedIn
-                                  ? (context.read<AuthBloc>().state
-                                                as AuthStateLoggedIn)
-                                            .user
-                                            .cedula ??
-                                        ''
-                                  : '',
-                            ),
-                          )
-                          ..add(
-                            StartTrackingUserEvent(
-                              cedula:
-                                  context.read<AuthBloc>().state
-                                      is AuthStateLoggedIn
-                                  ? (context.read<AuthBloc>().state
-                                                as AuthStateLoggedIn)
-                                            .user
-                                            .cedula ??
-                                        ''
-                                  : '',
-                            ),
-                          ),
-                        child: MapHome(user: user),
-                      ),
+                      builder: (dialogContext) {
+                        // 1. Obtener la cédula una sola vez usando el context original
+                        final authState = context.read<AuthBloc>().state;
+                        final String cedula = authState is AuthStateLoggedIn
+                            ? authState.user.cedula ?? ''
+                            : '';
+                        // 2. Retornar el BlocProvider limpio
+                        return BlocProvider(
+                          create: (_) {
+                            final bloc = context.read<LocationBloc>();
+                            // 1. Añade el primer evento inmediatamente
+                            bloc.add(InitialLocationEvent(cedula: cedula));
+                            // 2. Agenda el segundo evento para el siguiente ciclo del event loop
+                            // Esto garantiza que el BLoC registre primero el evento de inicialización
+                            Future.microtask(() {
+                              bloc.add(StartTrackingUserEvent(cedula: cedula));
+                            });
+                            return bloc;
+                          },
+                          child: MapHome(user: user),
+                        );
+                      },
                     );
                   },
                   child: WgLocation(),

@@ -16,11 +16,9 @@ class WgLocation extends StatelessWidget {
           elevation: 10,
           child: Column(
             children: [
-              BlocConsumer<LocationBloc, LocationState>(
-                listener: (BuildContext context, LocationState state) {
-                  CircularProgressIndicator.adaptive();
-                },
+              BlocBuilder<LocationBloc, LocationState>(
                 builder: (context, state) {
+                  //if (state.lastKnownLocation?.latitude != null) {
                   return Column(
                     children: [
                       Row(
@@ -37,6 +35,9 @@ class WgLocation extends StatelessWidget {
                       Text('Dis: ${state.distance}'),
                     ],
                   );
+                  /*} else {
+                    return CircularProgressIndicator.adaptive();
+                  }*/
                 },
               ),
             ],

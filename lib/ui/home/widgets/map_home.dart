@@ -1,11 +1,11 @@
 import 'package:controlelectoral/domain/models/user.dart';
 import 'package:controlelectoral/ui/auth/bloc/auth_bloc.dart';
+import 'package:controlelectoral/ui/core/ui/widgets/globo_advanced_avatar.dart';
 import 'package:controlelectoral/ui/home/widgets/track_home.dart';
 import 'package:controlelectoral/ui/location/bloc/location_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_map/flutter_map.dart';
-import 'package:latlong2/latlong.dart';
 
 class MapHome extends StatelessWidget {
   final User? user;
@@ -39,37 +39,63 @@ class MapHome extends StatelessWidget {
             ),
             child: BlocBuilder<LocationBloc, LocationState>(
               builder: (context, state) {
-                return FlutterMap(
-                  options: MapOptions(
-                    initialCenter:
-                        state.lastKnownLocation ??
-                        (state.locationHistory.isNotEmpty
-                            ? state.locationHistory.last
-                            : LatLng(0, 0)),
-                    initialZoom: 15,
-                  ),
-                  children: [
-                    TileLayer(
-                      urlTemplate:
-                          'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
-                      subdomains: const ['a', 'b', 'c'],
-                      userAgentPackageName: 'com.example.controlelectoral',
-                    ),
-                    PolylineLayer(
-                      polylines: [
-                        Polyline(
-                          points: state.locationHistory,
-                          color: Colors.blue,
-                          strokeWidth: 4.0,
+                if (state.locationHistory.isNotEmpty) {
+                  return Column(
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            'El usuario: ${user!.name}',
+                            style: TextStyle(
+                              fontSize: 20,
+                              color: Colors.black87,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          GloboAdvancedAvatar(
+                            name: state.locationHistory.length.toString(),
+                            radius: 40,
+                          ),
+                        ],
+                      ),
+                      Expanded(
+                        child: FlutterMap(
+                          options: MapOptions(
+                            initialCenter:
+                                state.lastKnownLocation ??
+                                state.locationHistory.last,
+                            initialZoom: 10,
+                          ),
+                          children: [
+                            TileLayer(
+                              urlTemplate:
+                                  'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+                              subdomains: const ['a', 'b', 'c'],
+                              userAgentPackageName:
+                                  'com.example.controlelectoral',
+                            ),
+                            PolylineLayer(
+                              polylines: [
+                                Polyline(
+                                  points: state.locationHistory,
+                                  color: Colors.blue,
+                                  strokeWidth: 4.0,
+                                ),
+                              ],
+                            ),
+                          ],
                         ),
-                      ],
-                    ),
-                  ],
-                );
+                      ),
+                    ],
+                  );
+                } else {
+                  return CircularProgressIndicator.adaptive();
+                }
               },
             ),
           ),
-          Padding(
+          /*Padding(
             padding: EdgeInsets.all(16.0),
             child: Text(
               'El usuario: ${user!.name}',
@@ -79,7 +105,7 @@ class MapHome extends StatelessWidget {
                 fontWeight: FontWeight.bold,
               ),
             ),
-          ),
+          ),*/
           Align(
             alignment: Alignment.bottomCenter,
             child: Row(

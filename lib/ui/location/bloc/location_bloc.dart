@@ -29,13 +29,23 @@ class LocationBloc extends Bloc<LocationEvent, LocationState> {
     List<Ubicacion> ubiHistory = await ubicacionRepository.getAllUbicaciones(
       event.cedula,
     );
+    final List<LatLng> lstHis = List.generate(ubiHistory.length, (index) {
+      return LatLng(
+        ubiHistory[index].latitud ?? 0.0,
+        ubiHistory[index].longitud ?? 0.0,
+      );
+    });
+
     emit(
       state.copyWith(
         lastKnownLocation: latLang,
         speed: speed,
         lstUbicaciones: ubiHistory,
+        locationHistory: lstHis,
+        showLocationHistory: true,
       ),
     );
+    print('llego iniciar');
   }
 
   Future<void> _onStartTrackingUserEvent(
@@ -80,7 +90,7 @@ class LocationBloc extends Bloc<LocationEvent, LocationState> {
             position.longitude,
           );
         }
-
+        var updatedList = List<Ubicacion>.from(state.lstUbicaciones);
         if (isGrabar) {
           final ubicacion = Ubicacion(
             cedula: event.cedula,
@@ -93,8 +103,9 @@ class LocationBloc extends Bloc<LocationEvent, LocationState> {
           ubicacionRepository
               .sendUbicacion(ubicacion)
               .then((ubicacionr) {
-                state.lstUbicaciones.add(ubicacionr);
-                emit(state.copyWith(lstUbicaciones: state.lstUbicaciones));
+                updatedList = updatedList..add(ubicacionr);
+                //emit(state.copyWith(lstUbicaciones: state.lstUbicaciones));
+
                 print('Grabar en la base de datos: ${ubicacionr.toJson()}');
               })
               .catchError((e) {
@@ -102,12 +113,13 @@ class LocationBloc extends Bloc<LocationEvent, LocationState> {
                 print('Error al grabar en la base de datos: ${e.toString()}');
               });
         }
-
+        print('start');
         return state.copyWith(
           lastKnownLocation: latLang,
           locationHistory: newHistory,
           speed: speed,
           distance: state.distance + currentDistance,
+          lstUbicaciones: updatedList,
         );
       },
     );
@@ -128,6 +140,5 @@ class LocationBloc extends Bloc<LocationEvent, LocationState> {
       event.sCedula,
     );
     state.copyWith(lstUbicaciones: ubiHistory);
-    emit(LocationLoaded());
   }
 }

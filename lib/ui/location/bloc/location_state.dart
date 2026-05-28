@@ -35,5 +35,3 @@ class LocationState {
     );
   }
 }
-
-class LocationLoaded extends LocationState {}
