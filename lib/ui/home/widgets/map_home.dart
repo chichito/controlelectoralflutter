@@ -65,7 +65,7 @@ class MapHome extends StatelessWidget {
                             initialCenter:
                                 state.lastKnownLocation ??
                                 state.locationHistory.last,
-                            initialZoom: 10,
+                            initialZoom: 18,
                           ),
                           children: [
                             TileLayer(

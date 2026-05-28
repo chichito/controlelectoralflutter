@@ -6,6 +6,7 @@ class LocationState {
   final bool showLocationHistory;
   final double speed;
   final double distance;
+  final double distanceAcumulada;
   final List<Ubicacion> lstUbicaciones;
 
   LocationState({
@@ -14,6 +15,7 @@ class LocationState {
     this.showLocationHistory = false,
     this.speed = 0.0,
     this.distance = 0.0,
+    this.distanceAcumulada = 0.0,
     this.lstUbicaciones = const [],
   });
 
@@ -23,6 +25,7 @@ class LocationState {
     bool? showLocationHistory,
     double? speed,
     double? distance,
+    double? distanceAcumulada,
     List<Ubicacion>? lstUbicaciones,
   }) {
     return LocationState(
@@ -31,6 +34,7 @@ class LocationState {
       showLocationHistory: showLocationHistory ?? this.showLocationHistory,
       speed: speed ?? this.speed,
       distance: distance ?? this.distance,
+      distanceAcumulada: distanceAcumulada ?? this.distanceAcumulada,
       lstUbicaciones: lstUbicaciones ?? this.lstUbicaciones,
     );
   }

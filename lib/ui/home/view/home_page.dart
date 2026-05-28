@@ -136,19 +136,19 @@ class _HomePageState extends State<HomePage> {
                         final String cedula = authState is AuthStateLoggedIn
                             ? authState.user.cedula ?? ''
                             : '';
-                        // 2. Retornar el BlocProvider limpio
-                        return BlocProvider(
-                          create: (_) {
-                            final bloc = context.read<LocationBloc>();
-                            // 1. Añade el primer evento inmediatamente
-                            bloc.add(InitialLocationEvent(cedula: cedula));
-                            // 2. Agenda el segundo evento para el siguiente ciclo del event loop
-                            // Esto garantiza que el BLoC registre primero el evento de inicialización
-                            Future.microtask(() {
-                              bloc.add(StartTrackingUserEvent(cedula: cedula));
-                            });
-                            return bloc;
-                          },
+                        // 2. Extraemos el bloc existente para mantenerlo en memoria
+                        final locationBloc = context.read<LocationBloc>();
+                        // 3. Añadir el primer evento inmediatamente
+                        locationBloc.add(InitialLocationEvent(cedula: cedula));
+                        // 4. Agenda el segundo evento para después de que el diálogo se dibuje
+                        WidgetsBinding.instance.addPostFrameCallback((_) {
+                          locationBloc.add(
+                            StartTrackingUserEvent(cedula: cedula),
+                          );
+                        });
+                        // 5. Retornar el BlocProvider usando .value
+                        return BlocProvider.value(
+                          value: locationBloc,
                           child: MapHome(user: user),
                         );
                       },

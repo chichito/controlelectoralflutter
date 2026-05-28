@@ -127,6 +127,19 @@ class _TrackHomeState extends State<TrackHome> {
                                   ),
                                 ),
                               ),
+                              Expanded(
+                                flex: 1,
+                                child: Container(
+                                  height: 40,
+                                  color: Colors.blue,
+                                  child: Center(
+                                    child: Text(
+                                      state.lstUbicaciones[index].distancia
+                                          .toString(),
+                                    ),
+                                  ),
+                                ),
+                              ),
                             ],
                           );
                         },

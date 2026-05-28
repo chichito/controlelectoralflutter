@@ -53,7 +53,12 @@ class LocationBloc extends Bloc<LocationEvent, LocationState> {
     Emitter<LocationState> emit,
   ) async {
     return emit.forEach(
-      Geolocator.getPositionStream(),
+      Geolocator.getPositionStream(
+        locationSettings: const LocationSettings(
+          accuracy: LocationAccuracy.best, // High precision
+          distanceFilter: 10, // Update on every tiny movement
+        ),
+      ),
       onData: (position) {
         final latLang = LatLng(position.latitude, position.longitude);
         // (lat4, long4)
@@ -61,6 +66,8 @@ class LocationBloc extends Bloc<LocationEvent, LocationState> {
         // [(lat1, long1), (lat2, long2), (lat3, long3), ]
         final lenghtantes = state.locationHistory.length;
         final List<LatLng> newHistory;
+        final speed = position.speed;
+        double currentDistance = 0;
         bool isGrabar = false;
         if (lenghtantes == 0) {
           newHistory = [...state.locationHistory, latLang];
@@ -74,22 +81,22 @@ class LocationBloc extends Bloc<LocationEvent, LocationState> {
             isGrabar = false;
           } else {
             newHistory = [...state.locationHistory, latLang];
+            final lenght = newHistory.length;
+            // [(lat1, long1), (lat2, long2), (lat3, long3), (lat4, long4)]
+
+            if (lenght > 1) {
+              currentDistance = Geolocator.distanceBetween(
+                newHistory[lenght - 2].latitude,
+                newHistory[lenght - 2].longitude,
+                position.latitude,
+                position.longitude,
+              );
+            }
+
             isGrabar = true;
           }
         }
-        final speed = position.speed;
-        final lenght = newHistory.length;
-        // [(lat1, long1), (lat2, long2), (lat3, long3), (lat4, long4)]
-        double currentDistance = 0;
 
-        if (lenght > 1) {
-          currentDistance = Geolocator.distanceBetween(
-            newHistory[lenght - 2].latitude,
-            newHistory[lenght - 2].longitude,
-            position.latitude,
-            position.longitude,
-          );
-        }
         var updatedList = List<Ubicacion>.from(state.lstUbicaciones);
         if (isGrabar) {
           final ubicacion = Ubicacion(
@@ -118,7 +125,8 @@ class LocationBloc extends Bloc<LocationEvent, LocationState> {
           lastKnownLocation: latLang,
           locationHistory: newHistory,
           speed: speed,
-          distance: state.distance + currentDistance,
+          distance: currentDistance,
+          distanceAcumulada: state.distance + currentDistance,
           lstUbicaciones: updatedList,
         );
       },
