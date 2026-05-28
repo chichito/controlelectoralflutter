@@ -13,16 +13,6 @@ class TrackHome extends StatefulWidget {
 }
 
 class _TrackHomeState extends State<TrackHome> {
-  /*
-  @override
-  void initState() {
-    super.initState();
-    context.read<LocationBloc>().add(
-      GetTrackingUserEvent(sCedula: widget.user!.cedula!),
-    );
-    // context.read<LocationBloc>().add(StartTrackingUserEvent());
-  }
-*/
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;

@@ -17,7 +17,9 @@ class WgLocation extends StatelessWidget {
           child: Column(
             children: [
               BlocConsumer<LocationBloc, LocationState>(
-                listener: (BuildContext context, LocationState state) {},
+                listener: (BuildContext context, LocationState state) {
+                  CircularProgressIndicator.adaptive();
+                },
                 builder: (context, state) {
                   return Column(
                     children: [

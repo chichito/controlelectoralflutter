@@ -129,7 +129,36 @@ class _HomePageState extends State<HomePage> {
                     showDialog(
                       context: context,
                       barrierDismissible: false,
-                      builder: (context) => MapHome(user: user),
+                      builder: (context) => BlocProvider(
+                        create: (context) => LocationBloc()
+                          ..add(
+                            InitialLocationEvent(
+                              cedula:
+                                  context.read<AuthBloc>().state
+                                      is AuthStateLoggedIn
+                                  ? (context.read<AuthBloc>().state
+                                                as AuthStateLoggedIn)
+                                            .user
+                                            .cedula ??
+                                        ''
+                                  : '',
+                            ),
+                          )
+                          ..add(
+                            StartTrackingUserEvent(
+                              cedula:
+                                  context.read<AuthBloc>().state
+                                      is AuthStateLoggedIn
+                                  ? (context.read<AuthBloc>().state
+                                                as AuthStateLoggedIn)
+                                            .user
+                                            .cedula ??
+                                        ''
+                                  : '',
+                            ),
+                          ),
+                        child: MapHome(user: user),
+                      ),
                     );
                   },
                   child: WgLocation(),

@@ -37,23 +37,36 @@ class MapHome extends StatelessWidget {
                 ),
               ],
             ),
-            child: FlutterMap(
-              options: MapOptions(
-                initialCenter: LatLng(-2.170998, -79.922359),
-                initialZoom: 15,
-              ),
-              children: [
-                TileLayer(
-                  urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
-                  subdomains: const ['a', 'b', 'c'],
-                  userAgentPackageName: 'com.example.controlelectoral',
-                ),
-                //PolylineLayer(
-                //polylines: [
-                //Polyline(points: State.)
-                //],
-                //),
-              ],
+            child: BlocBuilder<LocationBloc, LocationState>(
+              builder: (context, state) {
+                return FlutterMap(
+                  options: MapOptions(
+                    initialCenter:
+                        state.lastKnownLocation ??
+                        (state.locationHistory.isNotEmpty
+                            ? state.locationHistory.last
+                            : LatLng(0, 0)),
+                    initialZoom: 15,
+                  ),
+                  children: [
+                    TileLayer(
+                      urlTemplate:
+                          'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+                      subdomains: const ['a', 'b', 'c'],
+                      userAgentPackageName: 'com.example.controlelectoral',
+                    ),
+                    PolylineLayer(
+                      polylines: [
+                        Polyline(
+                          points: state.locationHistory,
+                          color: Colors.blue,
+                          strokeWidth: 4.0,
+                        ),
+                      ],
+                    ),
+                  ],
+                );
+              },
             ),
           ),
           Padding(
