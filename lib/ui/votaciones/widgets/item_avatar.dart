@@ -16,7 +16,7 @@ class _ItemAvatarState extends State<ItemAvatar> {
   Widget build(BuildContext context) {
     return Container(
       width: 100,
-      height: 350,
+      height: 200,
       padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 12),
       decoration: BoxDecoration(
         color: Colors.grey, // Change color here
@@ -28,14 +28,34 @@ class _ItemAvatarState extends State<ItemAvatar> {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          widget.candidato.imageUrllista!.isNotEmpty
-              ? Image.memory(
-                  widget.candidato.imageUrllista!,
-                  fit: BoxFit.scaleDown,
-                  width: 50,
-                  height: 50,
+          widget.candidato.imageUrllista != null
+              ? ClipRRect(
+                  borderRadius: BorderRadius.circular(50),
+                  child: Image.memory(
+                    widget.candidato.imageUrllista!,
+                    fit: BoxFit.scaleDown,
+                    width: 50,
+                    height: 50,
+                    errorBuilder: (context, error, stackTrace) {
+                      // Fallback if the URL is invalid or fails to load
+                      return Image.asset(
+                        'assets/images/no-image.png',
+                        fit: BoxFit.cover,
+                        width: 50,
+                        height: 50,
+                      );
+                    },
+                  ),
                 )
-              : const Text('No hay imagen para mostrar'),
+              : ClipRRect(
+                  borderRadius: BorderRadius.circular(50),
+                  child: Image.asset(
+                    'assets/images/no-image.png',
+                    fit: BoxFit.cover,
+                    width: 50,
+                    height: 50,
+                  ),
+                ),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
@@ -57,20 +77,40 @@ class _ItemAvatarState extends State<ItemAvatar> {
             ],
           ),
           const SizedBox(height: 8),
-          widget.candidato.imageUrllista!.isNotEmpty
+          widget.candidato.imageUrllista != null
               ? PhysicalModel(
                   borderRadius: BorderRadius.circular(20),
                   color: Colors.transparent,
                   clipBehavior: Clip.antiAlias,
                   elevation: 5.0,
-                  child: Image.memory(
-                    widget.candidato.imageUrllista!,
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(50),
+                    child: Image.memory(
+                      widget.candidato.imageUrllista!,
+                      fit: BoxFit.cover,
+                      width: 100,
+                      height: 100,
+                      errorBuilder: (context, error, stackTrace) {
+                        // Fallback if the URL is invalid or fails to load
+                        return Image.asset(
+                          'assets/images/no-image.png',
+                          fit: BoxFit.cover,
+                          width: 100,
+                          height: 100,
+                        );
+                      },
+                    ),
+                  ),
+                )
+              : ClipRRect(
+                  borderRadius: BorderRadius.circular(100),
+                  child: Image.asset(
+                    'assets/images/no-image.png',
                     fit: BoxFit.cover,
                     width: 100,
                     height: 100,
                   ),
-                )
-              : const Text('No hay imagen para mostrar'),
+                ),
           const SizedBox(height: 8),
           Flexible(
             child: RichText(

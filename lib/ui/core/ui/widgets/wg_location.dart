@@ -18,26 +18,26 @@ class WgLocation extends StatelessWidget {
             children: [
               BlocBuilder<LocationBloc, LocationState>(
                 builder: (context, state) {
-                  //if (state.lastKnownLocation?.latitude != null) {
-                  return Column(
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        //spacing: 12,
-                        children: [
-                          Text('Lat: ${state.lastKnownLocation?.latitude}'),
-                          VerticalDivider(color: Colors.grey[300]),
-                          Text('Lon: ${state.lastKnownLocation?.longitude}'),
-                          //VerticalDivider(color: Colors.grey[300]),
-                          //Text('Distancia: ${state.distance}'),
-                        ],
-                      ),
-                      Text('Dis: ${state.distance}'),
-                    ],
-                  );
-                  /*} else {
+                  if (state.lastKnownLocation?.latitude != null) {
+                    return Column(
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          //spacing: 12,
+                          children: [
+                            Text('Lat: ${state.lastKnownLocation?.latitude}'),
+                            VerticalDivider(color: Colors.grey[300]),
+                            Text('Lon: ${state.lastKnownLocation?.longitude}'),
+                            //VerticalDivider(color: Colors.grey[300]),
+                            //Text('Distancia: ${state.distance}'),
+                          ],
+                        ),
+                        Text('Dis: ${state.distanceAcumulada}'),
+                      ],
+                    );
+                  } else {
                     return CircularProgressIndicator.adaptive();
-                  }*/
+                  }
                 },
               ),
             ],

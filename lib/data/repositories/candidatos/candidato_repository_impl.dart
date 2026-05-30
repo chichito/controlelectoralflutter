@@ -56,6 +56,7 @@ class CandidatoRepositoryImpl extends CandidatoRepository {
     return List.generate(maps.length, (index) {
       return Candidato(
         codigo: maps[index]['codigo'],
+        codigocandidatura: candidaturaCodigo,
         codigolista: maps[index]['codigolista'],
         nombrelista: maps[index]['nombrelista'],
         imageUrllista: maps[index]['imageUrllista'],

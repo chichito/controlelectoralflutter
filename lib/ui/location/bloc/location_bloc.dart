@@ -125,8 +125,12 @@ class LocationBloc extends Bloc<LocationEvent, LocationState> {
           lastKnownLocation: latLang,
           locationHistory: newHistory,
           speed: speed,
-          distance: currentDistance,
-          distanceAcumulada: state.distance + currentDistance,
+          distance: currentDistance > 0
+              ? currentDistance
+              : state.distanceAcumulada,
+          distanceAcumulada: currentDistance > 0
+              ? state.distance + currentDistance
+              : state.distanceAcumulada,
           lstUbicaciones: updatedList,
         );
       },

@@ -98,66 +98,36 @@ class _LoginPageState extends State<LoginPage> {
           horizontal: 20.0,
           vertical: 10.0,
         ).copyWith(bottom: 20.0),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: [
-            ElevatedButton(
-              onPressed: () async {
-                await cubit.onLogin();
-                if (cubit.state.status == Status.success) {
-                  BotToast.showText(
-                    text: 'Bienvenido',
-                    duration: const Duration(seconds: 2),
-                  );
-                  navigatorKey.currentState?.pushNamedAndRemoveUntil(
-                    AppNavigator.home,
-                    (route) => false,
-                  );
-                } else if (cubit.state.status == Status.failure) {
-                  BotToast.showText(
-                    text: 'Algo salió mal. Intenta nuevamente ...',
-                    duration: const Duration(seconds: 2),
-                  );
-                } else if (cubit.state.status == Status.invalid) {
-                  BotToast.showText(
-                    text: 'Email o contraseña inválidos',
-                    duration: const Duration(seconds: 2),
-                  );
-                } else {
-                  BotToast.showText(
-                    text: 'Estado no reconocido',
-                    duration: const Duration(seconds: 2),
-                  );
-                }
-              },
-              child: const Text('Login'),
-            ),
-            ElevatedButton(
-              onPressed: () {
-                showDialog(
-                  context: context,
-                  barrierDismissible: false,
-                  builder: (BuildContext context) {
-                    return AlertDialog(
-                      title: const Text('Title'),
-                      content: const Text('This is the message body.'),
-                      actions: <Widget>[
-                        TextButton(
-                          onPressed: () => Navigator.pop(context, 'Cancel'),
-                          child: const Text('Cancel'),
-                        ),
-                        TextButton(
-                          onPressed: () => Navigator.pop(context, 'OK'),
-                          child: const Text('OK'),
-                        ),
-                      ],
-                    );
-                  },
-                );
-              },
-              child: Text('hola'),
-            ),
-          ],
+        child: ElevatedButton(
+          onPressed: () async {
+            await cubit.onLogin();
+            if (cubit.state.status == Status.success) {
+              BotToast.showText(
+                text: 'Bienvenido',
+                duration: const Duration(seconds: 2),
+              );
+              navigatorKey.currentState?.pushNamedAndRemoveUntil(
+                AppNavigator.home,
+                (route) => false,
+              );
+            } else if (cubit.state.status == Status.failure) {
+              BotToast.showText(
+                text: 'Algo salió mal. Intenta nuevamente ...',
+                duration: const Duration(seconds: 2),
+              );
+            } else if (cubit.state.status == Status.invalid) {
+              BotToast.showText(
+                text: 'Email o contraseña inválidos',
+                duration: const Duration(seconds: 2),
+              );
+            } else {
+              BotToast.showText(
+                text: 'Estado no reconocido',
+                duration: const Duration(seconds: 2),
+              );
+            }
+          },
+          child: const Text('Login'),
         ),
       ),
     );

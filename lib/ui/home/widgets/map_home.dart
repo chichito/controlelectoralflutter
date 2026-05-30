@@ -84,6 +84,76 @@ class MapHome extends StatelessWidget {
                                 ),
                               ],
                             ),
+                            // Capa de Marcadores
+                            MarkerLayer(
+                              markers: [
+                                Marker(
+                                  point: state
+                                      .locationHistory
+                                      .first, // Ubicación del marcador
+                                  width: 80.0,
+                                  height: 80.0,
+                                  child: Column(
+                                    children: [
+                                      Container(
+                                        padding: EdgeInsets.all(4),
+                                        decoration: BoxDecoration(
+                                          color: Colors.white,
+                                          borderRadius: BorderRadius.circular(
+                                            4,
+                                          ),
+                                        ),
+                                        child: Text(
+                                          'Inicio',
+                                          style: TextStyle(
+                                            fontSize: 12,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                      ),
+                                      Icon(
+                                        Icons.location_pin,
+                                        color: Colors.red,
+                                        size: 40.0,
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                Marker(
+                                  point: state
+                                      .locationHistory
+                                      .last, // Ubicación del marcador
+                                  width: 80.0,
+                                  height: 80.0,
+                                  child: Column(
+                                    children: [
+                                      Container(
+                                        padding: EdgeInsets.all(4),
+                                        decoration: BoxDecoration(
+                                          color: Colors.white,
+                                          borderRadius: BorderRadius.circular(
+                                            4,
+                                          ),
+                                        ),
+                                        child: Text(
+                                          'Fin',
+                                          style: TextStyle(
+                                            fontSize: 12,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                      ),
+                                      Icon(
+                                        Icons.location_pin,
+                                        color: Colors.red,
+                                        size: 40.0,
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                // Puedes agregar más marcadores aquí
+                              ],
+                            ),
                           ],
                         ),
                       ),

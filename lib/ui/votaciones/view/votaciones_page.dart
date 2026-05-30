@@ -1,10 +1,12 @@
 import 'package:controlelectoral/domain/models/candidatura.dart';
+import 'package:controlelectoral/domain/models/votacion.dart';
 import 'package:controlelectoral/main.dart';
 import 'package:controlelectoral/ui/auth/bloc/auth_bloc.dart';
 import 'package:controlelectoral/ui/core/navigation/app_navigator.dart';
 import 'package:controlelectoral/ui/core/ui/widgets/globo_avatar.dart';
 import 'package:controlelectoral/ui/fecha_hora/bloc/clock_bloc.dart';
 import 'package:controlelectoral/ui/votaciones/bloc/candidato_bloc.dart';
+import 'package:controlelectoral/ui/votaciones/bloc/votaciones_bloc.dart';
 import 'package:controlelectoral/ui/votaciones/widgets/item_avatar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -101,8 +103,21 @@ class _VotacionesPageState extends State<VotacionesPage> {
                           itemBuilder: (BuildContext context, int index) {
                             return GestureDetector(
                               onTap: () {
-                                print(
-                                  'Candidato tapped: ${state.candidatos[index].nombre}',
+                                Votacion votacion = Votacion(
+                                  codigocandidatura:
+                                      state
+                                          .candidatos[index]
+                                          .codigocandidatura ??
+                                      '',
+                                  codigocandidato:
+                                      state.candidatos[index].codigo ?? '',
+                                  codigolista:
+                                      state.candidatos[index].codigolista ?? '',
+                                  codigousuario: user!.cedula ?? '',
+                                );
+
+                                context.read<VotacionesBloc>().add(
+                                  SetVotacionEvent(votacion: votacion),
                                 );
                               },
                               child: ItemAvatar(

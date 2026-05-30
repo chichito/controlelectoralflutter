@@ -127,32 +127,38 @@ class _HomePageState extends State<HomePage> {
                 alignment: Alignment.bottomCenter,
                 child: GestureDetector(
                   onTap: () {
-                    showDialog(
-                      context: context,
-                      barrierDismissible: false,
-                      builder: (dialogContext) {
-                        // 1. Obtener la cédula una sola vez usando el context original
-                        final authState = context.read<AuthBloc>().state;
-                        final String cedula = authState is AuthStateLoggedIn
-                            ? authState.user.cedula ?? ''
-                            : '';
-                        // 2. Extraemos el bloc existente para mantenerlo en memoria
-                        final locationBloc = context.read<LocationBloc>();
-                        // 3. Añadir el primer evento inmediatamente
-                        locationBloc.add(InitialLocationEvent(cedula: cedula));
-                        // 4. Agenda el segundo evento para después de que el diálogo se dibuje
-                        WidgetsBinding.instance.addPostFrameCallback((_) {
+                    // 1. Ejecuta el evento del BLoC
+                    final estadoActual = context.read<LocationBloc>().state;
+                    if (estadoActual.showLocationHistory) {
+                      showDialog(
+                        context: context,
+                        barrierDismissible: false,
+                        builder: (dialogContext) {
+                          // 1. Obtener la cédula una sola vez usando el context original
+                          final authState = context.read<AuthBloc>().state;
+                          final String cedula = authState is AuthStateLoggedIn
+                              ? authState.user.cedula ?? ''
+                              : '';
+                          // 2. Extraemos el bloc existente para mantenerlo en memoria
+                          final locationBloc = context.read<LocationBloc>();
+                          // 3. Añadir el primer evento inmediatamente
                           locationBloc.add(
-                            StartTrackingUserEvent(cedula: cedula),
+                            InitialLocationEvent(cedula: cedula),
                           );
-                        });
-                        // 5. Retornar el BlocProvider usando .value
-                        return BlocProvider.value(
-                          value: locationBloc,
-                          child: MapHome(user: user),
-                        );
-                      },
-                    );
+                          // 4. Agenda el segundo evento para después de que el diálogo se dibuje
+                          WidgetsBinding.instance.addPostFrameCallback((_) {
+                            locationBloc.add(
+                              StartTrackingUserEvent(cedula: cedula),
+                            );
+                          });
+                          // 5. Retornar el BlocProvider usando .value
+                          return BlocProvider.value(
+                            value: locationBloc,
+                            child: MapHome(user: user),
+                          );
+                        },
+                      );
+                    }
                   },
                   child: WgLocation(),
                 ),

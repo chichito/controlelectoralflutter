@@ -13,12 +13,13 @@ import 'package:controlelectoral/ui/location/bloc/location_bloc.dart';
 import 'package:controlelectoral/ui/location/pages/gps_page.dart';
 import 'package:controlelectoral/ui/location/widgets/enable_gps.dart';
 import 'package:controlelectoral/ui/location/widgets/permissions_gps.dart';
-import 'package:controlelectoral/ui/votaciones/bloc/candidato_bloc.dart';
-import 'package:controlelectoral/ui/votaciones/bloc/lista_bloc.dart';
-import 'package:controlelectoral/ui/votaciones/view/votaciones_page.dart';
 import 'package:controlelectoral/ui/login/cubit/login_cubit.dart';
 import 'package:controlelectoral/ui/login/view/login_page.dart';
 import 'package:controlelectoral/ui/root/view/root_page.dart';
+import 'package:controlelectoral/ui/votaciones/bloc/candidato_bloc.dart';
+import 'package:controlelectoral/ui/votaciones/bloc/lista_bloc.dart';
+import 'package:controlelectoral/ui/votaciones/bloc/votaciones_bloc.dart';
+import 'package:controlelectoral/ui/votaciones/view/votaciones_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -96,6 +97,9 @@ return MultiBlocProvider(
                 BlocProvider<ListaBloc>(create: (context) => ListaBloc()),
                 BlocProvider<CandidatoBloc>(
                   create: (context) => CandidatoBloc(),
+                ),
+                BlocProvider<VotacionesBloc>(
+                  create: (context) => VotacionesBloc(),
                 ),
               ],
               child: VotacionesPage(),
